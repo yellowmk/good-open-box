@@ -11,7 +11,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middleware
 const allowedOrigins = NODE_ENV === 'production'
-  ? ['https://goodobox.com', 'https://www.goodobox.com']
+  ? ['https://goodobox.com', 'https://www.goodobox.com', process.env.FRONTEND_URL].filter(Boolean)
   : ['http://localhost:5173', 'http://localhost:5002'];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
