@@ -463,10 +463,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString(), products: products.length, users: users.length });
 });
 
-// ─── SERVE FRONTEND IN PRODUCTION ───────────────────────────────
+// ─── SERVE FRONTEND OR 404 ──────────────────────────────────────
 
-if (NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+const fs = require('fs');
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+if (NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
