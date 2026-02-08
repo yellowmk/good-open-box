@@ -78,7 +78,11 @@ const products = [
     price: 649.99, compareAtPrice: 999.99,
     category: 'Electronics', subcategory: 'TVs', brand: 'Samsung',
     condition: 'open-box', stock: 5, sku: 'SAM-QLED-65',
-    images: [], tags: ['tv', 'samsung', 'qled', '4k'],
+    images: [
+      'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1558888401-3cc1de77652d?w=800&h=800&fit=crop',
+    ], tags: ['tv', 'samsung', 'qled', '4k'],
     rating: 4.6, numReviews: 24, isFeatured: true,
   },
   {
@@ -88,7 +92,11 @@ const products = [
     price: 849.99, compareAtPrice: 1199.00,
     category: 'Electronics', subcategory: 'Laptops', brand: 'Apple',
     condition: 'like-new', stock: 3, sku: 'APL-MBA-M2',
-    images: [], tags: ['macbook', 'apple', 'laptop'],
+    images: [
+      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop',
+    ], tags: ['macbook', 'apple', 'laptop'],
     rating: 4.8, numReviews: 42, isFeatured: true,
   },
   {
@@ -98,7 +106,11 @@ const products = [
     price: 248.00, compareAtPrice: 399.99,
     category: 'Electronics', subcategory: 'Audio', brand: 'Sony',
     condition: 'open-box', stock: 12, sku: 'SONY-XM5',
-    images: [], tags: ['headphones', 'sony', 'wireless'],
+    images: [
+      'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=800&fit=crop',
+    ], tags: ['headphones', 'sony', 'wireless'],
     rating: 4.7, numReviews: 89, isFeatured: false,
   },
   {
@@ -108,7 +120,11 @@ const products = [
     price: 549.99, compareAtPrice: 799.00,
     category: 'Electronics', subcategory: 'Tablets', brand: 'Apple',
     condition: 'refurbished', stock: 7, sku: 'APL-IPADPRO-M2',
-    images: [], tags: ['ipad', 'apple', 'tablet'],
+    images: [
+      'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1585790050230-5dd28404ccb9?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=800&fit=crop',
+    ], tags: ['ipad', 'apple', 'tablet'],
     rating: 4.5, numReviews: 31, isFeatured: false,
   },
   {
@@ -118,7 +134,11 @@ const products = [
     price: 99.99, compareAtPrice: 149.00,
     category: 'Electronics', subcategory: 'Audio', brand: 'Bose',
     condition: 'open-box', stock: 20, sku: 'BOSE-FLEX',
-    images: [], tags: ['speaker', 'bose', 'bluetooth'],
+    images: [
+      'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1589003077984-894e133dabab?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop',
+    ], tags: ['speaker', 'bose', 'bluetooth'],
     rating: 4.4, numReviews: 56, isFeatured: false,
   },
   {
@@ -128,7 +148,10 @@ const products = [
     price: 449.99, compareAtPrice: 749.99,
     category: 'Home & Kitchen', subcategory: 'Vacuums', brand: 'Dyson',
     condition: 'open-box', stock: 4, sku: 'DYS-V15',
-    images: [], tags: ['vacuum', 'dyson', 'cordless'],
+    images: [
+      'https://images.unsplash.com/photo-1558317374-067fb5f30001?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1527515637462-cee1395c108b?w=800&h=800&fit=crop',
+    ], tags: ['vacuum', 'dyson', 'cordless'],
     rating: 4.7, numReviews: 18, isFeatured: true,
   },
   {
@@ -138,7 +161,10 @@ const products = [
     price: 279.99, compareAtPrice: 449.99,
     category: 'Home & Kitchen', subcategory: 'Kitchen', brand: 'KitchenAid',
     condition: 'open-box', stock: 6, sku: 'KA-ARTISAN',
-    images: [], tags: ['mixer', 'kitchenaid', 'baking'],
+    images: [
+      'https://images.unsplash.com/photo-1594385208974-2f8bb07bfab0?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=800&h=800&fit=crop',
+    ], tags: ['mixer', 'kitchenaid', 'baking'],
     rating: 4.9, numReviews: 12, isFeatured: false,
   },
   {
@@ -148,7 +174,10 @@ const products = [
     price: 69.99, compareAtPrice: 119.99,
     category: 'Home & Kitchen', subcategory: 'Kitchen', brand: 'Instant Pot',
     condition: 'like-new', stock: 15, sku: 'IP-DUO-8',
-    images: [], tags: ['instant-pot', 'pressure-cooker', 'kitchen'],
+    images: [
+      'https://images.unsplash.com/photo-1585515320310-259814833e62?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=800&h=800&fit=crop',
+    ], tags: ['instant-pot', 'pressure-cooker', 'kitchen'],
     rating: 4.3, numReviews: 67, isFeatured: false,
   },
   {
@@ -156,9 +185,13 @@ const products = [
     name: 'Nespresso Vertuo Next Coffee Machine', slug: 'nespresso-vertuo-next',
     description: 'Open-box Nespresso with Aeroccino milk frother bundle. Sealed pods sample pack included.',
     price: 129.99, compareAtPrice: 209.99,
+
     category: 'Home & Kitchen', subcategory: 'Kitchen', brand: 'Nespresso',
     condition: 'open-box', stock: 8, sku: 'NESP-VERTUO',
-    images: [], tags: ['coffee', 'nespresso', 'espresso'],
+    images: [
+      'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&h=800&fit=crop',
+    ], tags: ['coffee', 'nespresso', 'espresso'],
     rating: 4.2, numReviews: 35, isFeatured: false,
   },
   {
@@ -168,7 +201,10 @@ const products = [
     price: 349.99, compareAtPrice: 599.99,
     category: 'Home & Kitchen', subcategory: 'Vacuums', brand: 'iRobot',
     condition: 'refurbished', stock: 3, sku: 'IRB-J7PLUS',
-    images: [], tags: ['roomba', 'robot-vacuum', 'smart-home'],
+    images: [
+      'https://images.unsplash.com/photo-1667044855958-c4899a1490be?w=800&h=800&fit=crop',
+      'https://images.unsplash.com/photo-1603618090561-412154b4bd1b?w=800&h=800&fit=crop',
+    ], tags: ['roomba', 'robot-vacuum', 'smart-home'],
     rating: 4.5, numReviews: 22, isFeatured: true,
   },
 ];
