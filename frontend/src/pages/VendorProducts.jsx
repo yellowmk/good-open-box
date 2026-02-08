@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import API from '../api/axios'
 import ConditionBadge from '../components/ConditionBadge'
+import ImageUpload from '../components/ImageUpload'
 
 const emptyProduct = {
   name: '',
@@ -12,6 +13,7 @@ const emptyProduct = {
   stock: '',
   brand: '',
   tags: '',
+  images: [],
 }
 
 export default function VendorProducts() {
@@ -55,6 +57,7 @@ export default function VendorProducts() {
       stock: product.stock,
       brand: product.brand || '',
       tags: product.tags?.join(', ') || '',
+      images: product.images || [],
     })
     setEditId(product.id)
     setShowForm(true)
@@ -72,6 +75,7 @@ export default function VendorProducts() {
         compareAtPrice: form.compareAtPrice ? parseFloat(form.compareAtPrice) : undefined,
         stock: parseInt(form.stock),
         tags: form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
+        images: form.images || [],
       }
       if (editId) {
         await API.put(`/products/${editId}`, payload)
@@ -222,6 +226,10 @@ export default function VendorProducts() {
                     className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
                   />
                 </div>
+                <ImageUpload
+                  images={form.images}
+                  onChange={(imgs) => setForm({ ...form, images: imgs })}
+                />
                 <div>
                   <label className="block text-sm font-bold text-gray-900 mb-1">Tags (comma-separated)</label>
                   <input
