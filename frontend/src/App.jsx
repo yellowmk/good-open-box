@@ -14,6 +14,7 @@ import OrderDetail from './pages/OrderDetail'
 import VendorDashboard from './pages/VendorDashboard'
 import VendorProducts from './pages/VendorProducts'
 import AdminDashboard from './pages/AdminDashboard'
+import ChatWidget from './components/ChatWidget'
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   )
 }

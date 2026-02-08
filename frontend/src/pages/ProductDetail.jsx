@@ -4,6 +4,7 @@ import API from '../api/axios'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import ConditionBadge from '../components/ConditionBadge'
+import AiRecommendations from '../components/AiRecommendations'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -210,7 +211,10 @@ export default function ProductDetail() {
                     >
                       {added ? 'Added to Cart!' : 'Add to Cart'}
                     </button>
-                    <button className="w-full py-2.5 rounded-full font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white transition">
+                    <button
+                      onClick={() => { addToCart(product, quantity); window.location.href = '/checkout' }}
+                      className="w-full py-2.5 rounded-full font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white transition"
+                    >
                       Buy Now
                     </button>
                   </div>
@@ -312,6 +316,9 @@ export default function ProductDetail() {
             </div>
           </div>
         </section>
+
+        {/* AI Recommendations */}
+        <AiRecommendations productId={id} />
       </div>
     </div>
   )

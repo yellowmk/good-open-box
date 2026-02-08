@@ -20,10 +20,10 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-bold text-sm mb-3">Get to Know Us</h4>
               <ul className="space-y-2 text-sm">
-                <li><span className="hover:text-white hover:underline cursor-pointer">About Good Open Box</span></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Careers</span></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Press Releases</span></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Sustainability</span></li>
+                <li><Link to="/" className="hover:text-white hover:underline">About Good Open Box</Link></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Careers</Link></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Press Releases</Link></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Sustainability</Link></li>
               </ul>
             </div>
             <div>
@@ -54,9 +54,9 @@ export default function Footer() {
               <h4 className="text-white font-bold text-sm mb-3">Help & Support</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link to="/orders" className="hover:text-white hover:underline">Your Orders</Link></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Shipping Rates & Policies</span></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Returns & Replacements</span></li>
-                <li><span className="hover:text-white hover:underline cursor-pointer">Customer Service</span></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Shipping Rates & Policies</Link></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Returns & Replacements</Link></li>
+                <li><Link to="/" className="hover:text-white hover:underline">Customer Service</Link></li>
               </ul>
             </div>
           </div>

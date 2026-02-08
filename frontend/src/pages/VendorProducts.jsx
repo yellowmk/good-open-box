@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import API from '../api/axios'
 import ConditionBadge from '../components/ConditionBadge'
 import ImageUpload from '../components/ImageUpload'
+import AiDescriptionGenerator from '../components/AiDescriptionGenerator'
 
 const emptyProduct = {
   name: '',
@@ -145,7 +146,13 @@ export default function VendorProducts() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-1">Description</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-sm font-bold text-gray-900">Description</label>
+                    <AiDescriptionGenerator
+                      form={form}
+                      onGenerated={(desc) => setForm({ ...form, description: desc })}
+                    />
+                  </div>
                   <textarea
                     required
                     rows={3}
