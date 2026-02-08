@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext'
 
 const categories = [
   'Electronics', 'Home & Kitchen', 'Sports & Outdoors', 'Fashion', 'Toys & Games',
+  'Beauty & Personal Care', 'Automotive', 'Office & School', 'Baby & Kids', 'Patio & Garden',
 ]
 
 const conditions = [

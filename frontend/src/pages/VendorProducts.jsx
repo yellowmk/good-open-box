@@ -190,6 +190,11 @@ export default function VendorProducts() {
                       <option>Sports & Outdoors</option>
                       <option>Fashion</option>
                       <option>Toys & Games</option>
+                      <option>Beauty & Personal Care</option>
+                      <option>Automotive</option>
+                      <option>Office & School</option>
+                      <option>Baby & Kids</option>
+                      <option>Patio & Garden</option>
                     </select>
                   </div>
                   <div>

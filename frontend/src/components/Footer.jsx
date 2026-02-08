@@ -42,6 +42,12 @@ export default function Footer() {
                 <li><Link to="/products?category=Home+%26+Kitchen" className="hover:text-white hover:underline">Home & Kitchen</Link></li>
                 <li><Link to="/products?category=Sports+%26+Outdoors" className="hover:text-white hover:underline">Sports & Outdoors</Link></li>
                 <li><Link to="/products?category=Fashion" className="hover:text-white hover:underline">Fashion</Link></li>
+                <li><Link to="/products?category=Toys+%26+Games" className="hover:text-white hover:underline">Toys & Games</Link></li>
+                <li><Link to="/products?category=Beauty+%26+Personal+Care" className="hover:text-white hover:underline">Beauty & Personal Care</Link></li>
+                <li><Link to="/products?category=Automotive" className="hover:text-white hover:underline">Automotive</Link></li>
+                <li><Link to="/products?category=Office+%26+School" className="hover:text-white hover:underline">Office & School</Link></li>
+                <li><Link to="/products?category=Baby+%26+Kids" className="hover:text-white hover:underline">Baby & Kids</Link></li>
+                <li><Link to="/products?category=Patio+%26+Garden" className="hover:text-white hover:underline">Patio & Garden</Link></li>
               </ul>
             </div>
             <div>

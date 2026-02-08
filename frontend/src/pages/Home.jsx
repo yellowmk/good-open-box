@@ -4,11 +4,16 @@ import API from '../api/axios'
 import ProductCard from '../components/ProductCard'
 
 const categories = [
-  { name: 'Electronics', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=300&fit=crop', color: 'from-blue-500/10' },
-  { name: 'Home & Kitchen', img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop', color: 'from-amber-500/10' },
-  { name: 'Sports & Outdoors', img: 'https://images.unsplash.com/photo-1461896836934-bd45ba8e6de8?w=300&h=300&fit=crop', color: 'from-green-500/10' },
-  { name: 'Fashion', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=300&fit=crop', color: 'from-pink-500/10' },
-  { name: 'Toys & Games', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=300&h=300&fit=crop', color: 'from-purple-500/10' },
+  { name: 'Electronics', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300&h=300&fit=crop' },
+  { name: 'Home & Kitchen', img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop' },
+  { name: 'Sports & Outdoors', img: 'https://images.unsplash.com/photo-1461896836934-bd45ba8e6de8?w=300&h=300&fit=crop' },
+  { name: 'Fashion', img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=300&fit=crop' },
+  { name: 'Toys & Games', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=300&h=300&fit=crop' },
+  { name: 'Beauty & Personal Care', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop' },
+  { name: 'Automotive', img: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=300&h=300&fit=crop' },
+  { name: 'Office & School', img: 'https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=300&h=300&fit=crop' },
+  { name: 'Baby & Kids', img: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300&h=300&fit=crop' },
+  { name: 'Patio & Garden', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&h=300&fit=crop' },
 ]
 
 const dealBanners = [
