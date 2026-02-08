@@ -1,23 +1,22 @@
 import { useState, useRef } from 'react'
 
-const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-
 export default function ImageUpload({ images = [], onChange }) {
   const [uploading, setUploading] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const fileRef = useRef()
 
   const uploadFile = async (file) => {
-    if (!CLOUD_NAME || !UPLOAD_PRESET) {
-      alert('Image upload not configured. Add VITE_CLOUDINARY_CLOUD_NAME and VITE_CLOUDINARY_UPLOAD_PRESET to environment variables.')
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+    if (!cloudName || !uploadPreset) {
+      alert('Image upload not configured. Contact the site administrator.')
       return null
     }
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('upload_preset', UPLOAD_PRESET)
+    formData.append('upload_preset', uploadPreset)
     formData.append('folder', 'goodobox')
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
       method: 'POST',
       body: formData,
     })
