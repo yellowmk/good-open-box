@@ -5,7 +5,7 @@ const client = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
   : null;
 
-const MODEL = 'claude-sonnet-4-5-20250929';
+const MODEL = 'claude-opus-4-6';
 
 // ─── Tool Definitions for Chat ──────────────────────────────────
 
