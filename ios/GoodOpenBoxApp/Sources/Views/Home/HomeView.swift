@@ -15,6 +15,12 @@ struct HomeView: View {
                 ZStack {
                     Color.brandTeal
                     VStack(spacing: 12) {
+                        AsyncImage(url: URL(string: "https://goodobox.com/logo-full.png")) { phase in
+                            if let img = phase.image {
+                                img.resizable().scaledToFit()
+                            }
+                        }
+                        .frame(height: 50)
                         Text("Open Box Deals")
                             .font(.largeTitle.bold())
                             .foregroundStyle(.white)

@@ -15,9 +15,16 @@ struct RegisterView: View {
         ScrollView {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Image(systemName: "person.badge.plus")
-                        .font(.system(size: 48))
-                        .foregroundStyle(Color.brandAmber)
+                    AsyncImage(url: URL(string: "https://goodobox.com/logo-icon.png")) { phase in
+                        if let img = phase.image {
+                            img.resizable().scaledToFit()
+                        } else {
+                            Image(systemName: "person.badge.plus")
+                                .font(.system(size: 48))
+                                .foregroundStyle(Color.brandAmber)
+                        }
+                    }
+                    .frame(width: 80, height: 80)
                     Text("Create Account")
                         .font(.title.bold())
                 }

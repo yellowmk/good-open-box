@@ -11,9 +11,16 @@ struct LoginView: View {
         ScrollView {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Image(systemName: "shippingbox.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(Color.brandAmber)
+                    AsyncImage(url: URL(string: "https://goodobox.com/logo-icon.png")) { phase in
+                        if let img = phase.image {
+                            img.resizable().scaledToFit()
+                        } else {
+                            Image(systemName: "shippingbox.fill")
+                                .font(.system(size: 48))
+                                .foregroundStyle(Color.brandAmber)
+                        }
+                    }
+                    .frame(width: 80, height: 80)
                     Text("Good Open Box")
                         .font(.title.bold())
                     Text("Sign in to your account")
