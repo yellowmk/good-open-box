@@ -11,7 +11,7 @@ struct DriverLoginView: View {
         ScrollView {
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    AsyncImage(url: URL(string: "https://goodobox.com/logo-icon.png")) { phase in
+                    AsyncImage(url: URL(string: "https://goodobox.com/logo-full.png")) { phase in
                         if let img = phase.image {
                             img.resizable().scaledToFit()
                         } else {
@@ -20,9 +20,8 @@ struct DriverLoginView: View {
                                 .foregroundStyle(Color.driverAmber)
                         }
                     }
-                    .frame(width: 80, height: 80)
-                    Text("Good Open Box")
-                        .font(.title.bold())
+                    .frame(maxWidth: 250, maxHeight: 70)
+                    .padding(.horizontal)
                     Text("Driver Portal")
                         .font(.title3)
                         .foregroundStyle(.secondary)
