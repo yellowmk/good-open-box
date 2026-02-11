@@ -8,18 +8,25 @@ struct DriverContentView: View {
         Group {
             if auth.isAuthenticated && auth.currentUser?.role == "driver" {
                 TabView {
-                    Tab("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent") {
-                        NavigationStack { DriverDashboardView() }
-                    }
-                    Tab("Available", systemImage: "shippingbox.fill") {
-                        NavigationStack { AvailableDeliveriesView() }
-                    }
-                    Tab("My Deliveries", systemImage: "list.bullet.clipboard.fill") {
-                        NavigationStack { MyDeliveriesView() }
-                    }
-                    Tab("Earnings", systemImage: "dollarsign.circle.fill") {
-                        NavigationStack { EarningsView() }
-                    }
+                    NavigationStack { DriverDashboardView() }
+                        .tabItem {
+                            Label("Dashboard", systemImage: "gauge.with.dots.needle.bottom.50percent")
+                        }
+
+                    NavigationStack { AvailableDeliveriesView() }
+                        .tabItem {
+                            Label("Available", systemImage: "shippingbox.fill")
+                        }
+
+                    NavigationStack { MyDeliveriesView() }
+                        .tabItem {
+                            Label("My Deliveries", systemImage: "list.bullet.clipboard.fill")
+                        }
+
+                    NavigationStack { EarningsView() }
+                        .tabItem {
+                            Label("Earnings", systemImage: "dollarsign.circle.fill")
+                        }
                 }
                 .tint(Color.driverAmber)
             } else {

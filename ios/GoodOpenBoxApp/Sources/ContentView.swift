@@ -7,43 +7,48 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            Tab("Home", systemImage: "house.fill") {
-                NavigationStack {
-                    HomeView()
-                }
+            NavigationStack {
+                HomeView()
+            }
+            .tabItem {
+                Label("Home", systemImage: "house.fill")
             }
 
-            Tab("Search", systemImage: "magnifyingglass") {
-                NavigationStack {
-                    ProductListView()
-                }
+            NavigationStack {
+                ProductListView()
+            }
+            .tabItem {
+                Label("Search", systemImage: "magnifyingglass")
             }
 
-            Tab("Cart", systemImage: "cart.fill") {
-                NavigationStack {
-                    CartView()
-                }
+            NavigationStack {
+                CartView()
+            }
+            .tabItem {
+                Label("Cart", systemImage: "cart.fill")
             }
             .badge(cart.itemCount)
 
-            Tab("Orders", systemImage: "shippingbox.fill") {
-                NavigationStack {
-                    if auth.isAuthenticated {
-                        OrderListView()
-                    } else {
-                        LoginView()
-                    }
+            NavigationStack {
+                if auth.isAuthenticated {
+                    OrderListView()
+                } else {
+                    LoginView()
                 }
             }
+            .tabItem {
+                Label("Orders", systemImage: "shippingbox.fill")
+            }
 
-            Tab("Profile", systemImage: "person.fill") {
-                NavigationStack {
-                    if auth.isAuthenticated {
-                        ProfileView()
-                    } else {
-                        LoginView()
-                    }
+            NavigationStack {
+                if auth.isAuthenticated {
+                    ProfileView()
+                } else {
+                    LoginView()
                 }
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.fill")
             }
         }
         .tint(Color.brandAmber)
