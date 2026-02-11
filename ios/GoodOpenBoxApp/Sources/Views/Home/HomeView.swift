@@ -20,7 +20,8 @@ struct HomeView: View {
                                 img.resizable().scaledToFit()
                             }
                         }
-                        .frame(height: 50)
+                        .frame(maxWidth: 280, maxHeight: 70)
+                        .padding(.horizontal)
                         Text("Open Box Deals")
                             .font(.largeTitle.bold())
                             .foregroundStyle(.white)
