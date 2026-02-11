@@ -28,6 +28,10 @@ public actor APIClient {
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
+                print("[APIClient] Decoding error for \(T.self): \(error)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("[APIClient] Raw response: \(raw.prefix(500))")
+                }
                 throw APIError.decodingError(error)
             }
         case 401:

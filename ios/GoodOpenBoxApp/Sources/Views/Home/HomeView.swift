@@ -123,16 +123,27 @@ struct HomeView: View {
         .task { await loadData() }
     }
 
+    @MainActor
     private func loadData() async {
         isLoading = true
-        async let f = try? APIClient.shared.request(.featuredProducts, as: ProductListResponse.self)
-        async let d = try? APIClient.shared.request(.products(category: nil, condition: nil, search: nil, sort: "price_asc", minPrice: nil, maxPrice: nil, page: 1, limit: 8), as: ProductListResponse.self)
-        async let c = try? APIClient.shared.request(.categories, as: CategoryListResponse.self)
-
-        let (featuredRes, dealsRes, catRes) = await (f, d, c)
-        featured = featuredRes?.products ?? []
-        deals = dealsRes?.products ?? []
-        categories = catRes?.categories ?? []
+        do {
+            let featuredRes = try await APIClient.shared.request(.featuredProducts, as: ProductListResponse.self)
+            featured = featuredRes.products
+        } catch {
+            print("Featured error: \(error)")
+        }
+        do {
+            let dealsRes = try await APIClient.shared.request(.products(category: nil, condition: nil, search: nil, sort: "price_asc", minPrice: nil, maxPrice: nil, page: 1, limit: 8), as: ProductListResponse.self)
+            deals = dealsRes.products
+        } catch {
+            print("Deals error: \(error)")
+        }
+        do {
+            let catRes = try await APIClient.shared.request(.categories, as: CategoryListResponse.self)
+            categories = catRes.categories
+        } catch {
+            print("Categories error: \(error)")
+        }
         isLoading = false
     }
 }
