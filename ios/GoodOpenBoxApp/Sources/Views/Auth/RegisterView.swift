@@ -8,6 +8,8 @@ struct RegisterView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var showingTerms = false
+    @State private var showingPrivacy = false
 
     private var passwordsMatch: Bool { password == confirmPassword }
 
@@ -90,6 +92,25 @@ struct RegisterView: View {
                 .tint(Color.brandAmber)
                 .controlSize(.large)
                 .disabled(name.isEmpty || email.isEmpty || password.isEmpty || !passwordsMatch || auth.isLoading)
+
+                HStack(spacing: 0) {
+                    Text("By registering, you agree to our ")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Terms") { showingTerms = true }
+                        .font(.caption.bold())
+                        .foregroundStyle(Color.brandAmber)
+                    Text(" and ")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Privacy Policy") { showingPrivacy = true }
+                        .font(.caption.bold())
+                        .foregroundStyle(Color.brandAmber)
+                    Text(".")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 24)
         }
@@ -97,6 +118,26 @@ struct RegisterView: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }
+            }
+        }
+        .sheet(isPresented: $showingTerms) {
+            NavigationStack {
+                TermsOfServiceView()
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { showingTerms = false }
+                        }
+                    }
+            }
+        }
+        .sheet(isPresented: $showingPrivacy) {
+            NavigationStack {
+                PrivacyPolicyView()
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") { showingPrivacy = false }
+                        }
+                    }
             }
         }
     }

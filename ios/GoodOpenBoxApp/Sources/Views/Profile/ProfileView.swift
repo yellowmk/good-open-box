@@ -36,6 +36,12 @@ struct ProfileView: View {
                     }
                 }
 
+                Section("Legal") {
+                    NavigationLink(destination: LegalPoliciesView()) {
+                        Label("Legal Policies", systemImage: "doc.text.fill")
+                    }
+                }
+
                 Section {
                     Button(role: .destructive) {
                         Task { await auth.logout() }
