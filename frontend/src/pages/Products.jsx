@@ -1,32 +1,42 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
 import ProductCard from '../components/ProductCard'
-
-const conditionOptions = [
-  { value: '', label: 'All Conditions' },
-  { value: 'new', label: 'New' },
-  { value: 'like-new', label: 'Like New' },
-  { value: 'open-box', label: 'Open Box' },
-  { value: 'refurbished', label: 'Refurbished' },
-  { value: 'used', label: 'Used' },
-]
-
-const sortOptions = [
-  { value: '', label: 'Featured' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Avg. Customer Review' },
-  { value: 'name', label: 'Name: A-Z' },
-]
+import { translateCategory } from '../lib/translations'
 
 export default function Products() {
+  const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [products, setProducts] = useState([])
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 })
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [filtersOpen, setFiltersOpen] = useState(false)
+
+  const conditionOptions = [
+    { value: '', label: t('conditions.all') },
+    { value: 'new', label: t('conditions.new') },
+    { value: 'like-new', label: t('conditions.like-new') },
+    { value: 'open-box', label: t('conditions.open-box') },
+    { value: 'refurbished', label: t('conditions.refurbished') },
+    { value: 'used', label: t('conditions.used') },
+  ]
+
+  const sortOptions = [
+    { value: '', label: t('sort.featured') },
+    { value: 'price_asc', label: t('sort.priceLowHigh') },
+    { value: 'price_desc', label: t('sort.priceHighLow') },
+    { value: 'rating', label: t('sort.avgReview') },
+    { value: 'name', label: t('sort.nameAZ') },
+  ]
+
+  const priceRangeLabels = [
+    t('products.under100'),
+    t('products.range100_300'),
+    t('products.range300_500'),
+    t('products.range500plus'),
+  ]
 
   const category = searchParams.get('category') || ''
   const condition = searchParams.get('condition') || ''
@@ -84,11 +94,11 @@ export default function Products() {
     <div className="space-y-5">
       {/* Category */}
       <div>
-        <h3 className="font-bold text-sm text-gray-900 mb-2">Department</h3>
+        <h3 className="font-bold text-sm text-gray-900 mb-2">{t('products.department')}</h3>
         <ul className="space-y-1">
           <li>
             <button onClick={() => updateFilter('category', '')} className={`text-sm hover:text-amber-700 ${!category ? 'font-bold text-amber-700' : 'text-gray-700'}`}>
-              All Departments
+              {t('products.allDepartments')}
             </button>
           </li>
           {categories.map((cat) => (
@@ -97,7 +107,7 @@ export default function Products() {
                 onClick={() => updateFilter('category', cat.name || cat)}
                 className={`text-sm hover:text-amber-700 ${category === (cat.name || cat) ? 'font-bold text-amber-700' : 'text-gray-700'}`}
               >
-                {cat.name || cat}
+                {translateCategory(t, cat.name || cat)}
               </button>
             </li>
           ))}
@@ -106,7 +116,7 @@ export default function Products() {
 
       {/* Condition */}
       <div>
-        <h3 className="font-bold text-sm text-gray-900 mb-2">Condition</h3>
+        <h3 className="font-bold text-sm text-gray-900 mb-2">{t('products.condition')}</h3>
         <ul className="space-y-1">
           {conditionOptions.map((opt) => (
             <li key={opt.value}>
@@ -127,24 +137,24 @@ export default function Products() {
 
       {/* Price */}
       <div>
-        <h3 className="font-bold text-sm text-gray-900 mb-2">Price</h3>
+        <h3 className="font-bold text-sm text-gray-900 mb-2">{t('products.price')}</h3>
         <div className="flex items-center gap-2">
           <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
             <span className="px-2 text-xs text-gray-400 bg-gray-50">$</span>
             <input
               type="number"
-              placeholder="Min"
+              placeholder={t('products.min')}
               value={minPrice}
               onChange={(e) => updateFilter('minPrice', e.target.value)}
               className="w-16 px-1 py-1.5 text-sm focus:outline-none"
             />
           </div>
-          <span className="text-gray-400 text-xs">to</span>
+          <span className="text-gray-400 text-xs">{t('products.to')}</span>
           <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
             <span className="px-2 text-xs text-gray-400 bg-gray-50">$</span>
             <input
               type="number"
-              placeholder="Max"
+              placeholder={t('products.max')}
               value={maxPrice}
               onChange={(e) => updateFilter('maxPrice', e.target.value)}
               className="w-16 px-1 py-1.5 text-sm focus:outline-none"
@@ -152,7 +162,7 @@ export default function Products() {
           </div>
         </div>
         <div className="mt-2 flex flex-wrap gap-1">
-          {['Under $100', '$100–$300', '$300–$500', '$500+'].map((label, i) => {
+          {priceRangeLabels.map((label, i) => {
             const ranges = [['', '100'], ['100', '300'], ['300', '500'], ['500', '']]
             return (
               <button
@@ -169,7 +179,7 @@ export default function Products() {
 
       {hasFilters && (
         <button onClick={clearFilters} className="text-sm text-blue-600 hover:underline">
-          Clear all filters
+          {t('products.clearAllFilters')}
         </button>
       )}
     </div>
@@ -180,16 +190,16 @@ export default function Products() {
       <div className="max-w-[1400px] mx-auto px-4 py-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-3">
-          <Link to="/" className="hover:text-amber-700 hover:underline">Home</Link>
+          <Link to="/" className="hover:text-amber-700 hover:underline">{t('products.home')}</Link>
           <span className="mx-1.5">/</span>
           {category ? (
             <>
-              <Link to="/products" className="hover:text-amber-700 hover:underline">Products</Link>
+              <Link to="/products" className="hover:text-amber-700 hover:underline">{t('products.products')}</Link>
               <span className="mx-1.5">/</span>
-              <span className="text-gray-900">{category}</span>
+              <span className="text-gray-900">{translateCategory(t, category)}</span>
             </>
           ) : (
-            <span className="text-gray-900">All Products</span>
+            <span className="text-gray-900">{t('products.allProducts')}</span>
           )}
         </nav>
 
@@ -197,15 +207,15 @@ export default function Products() {
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
           <div>
             <h1 className="text-xl font-bold text-gray-900">
-              {search ? `Results for "${search}"` : category || 'All Products'}
+              {search ? t('products.searchResults', { query: search }) : category ? translateCategory(t, category) : t('products.allProducts')}
             </h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {pagination.total > 0 ? `1-${Math.min(products.length, pagination.total)} of ${pagination.total} results` : 'No results'}
+              {pagination.total > 0 ? t('products.resultCount', { shown: Math.min(products.length, pagination.total), total: pagination.total }) : t('products.noResults')}
             </p>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setFiltersOpen(!filtersOpen)} className="md:hidden text-sm border border-gray-300 rounded-md px-3 py-1.5 bg-white">
-              Filters
+              {t('products.filters')}
             </button>
             <select
               value={sort}
@@ -213,7 +223,7 @@ export default function Products() {
               className="text-sm border border-gray-300 rounded-md px-3 py-1.5 bg-white"
             >
               {sortOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>Sort by: {opt.label}</option>
+                <option key={opt.value} value={opt.value}>{t('products.sortBy', { label: opt.label })}</option>
               ))}
             </select>
           </div>
@@ -233,7 +243,7 @@ export default function Products() {
               <div className="absolute inset-0 bg-black/50" onClick={() => setFiltersOpen(false)} />
               <div className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl p-4 overflow-y-auto">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-bold text-lg">Filters</h2>
+                  <h2 className="font-bold text-lg">{t('products.filters')}</h2>
                   <button onClick={() => setFiltersOpen(false)} className="text-gray-400 hover:text-gray-600">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -262,9 +272,34 @@ export default function Products() {
               </div>
             ) : products.length === 0 ? (
               <div className="bg-white rounded-md border border-gray-200 text-center py-16 px-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No results found</h3>
-                <p className="text-sm text-gray-500 mb-4">Try adjusting your search or filter criteria</p>
-                <button onClick={clearFilters} className="text-sm text-blue-600 hover:underline">Clear all filters</button>
+                <svg className="w-16 h-16 text-gray-200 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {search ? t('products.noResultsTitle', { query: search }) : t('products.noProductsFound')}
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  {search
+                    ? t('products.checkSpelling')
+                    : t('products.tryAdjusting')}
+                </p>
+                {search && (
+                  <div className="mb-4">
+                    <p className="text-xs text-gray-400 mb-2">{t('products.trySearchingFor')}</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {['Electronics', 'Headphones', 'Laptop', 'Kitchen'].map((term) => (
+                        <Link
+                          key={term}
+                          to={`/products?search=${encodeURIComponent(term)}`}
+                          className="text-xs px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full hover:bg-amber-50 hover:text-amber-700 transition"
+                        >
+                          {term}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <button onClick={clearFilters} className="text-sm text-blue-600 hover:underline">{t('products.clearAllFilters')}</button>
               </div>
             ) : (
               <>
@@ -281,7 +316,7 @@ export default function Products() {
                       disabled={page <= 1}
                       className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
                     >
-                      Previous
+                      {t('products.previous')}
                     </button>
                     {[...Array(pagination.pages)].map((_, i) => (
                       <button
@@ -301,7 +336,7 @@ export default function Products() {
                       disabled={page >= pagination.pages}
                       className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
                     >
-                      Next
+                      {t('products.next')}
                     </button>
                   </div>
                 )}

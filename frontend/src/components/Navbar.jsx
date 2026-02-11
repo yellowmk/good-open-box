@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
+import { translateCategory, translateCondition } from '../lib/translations'
+import LanguageSwitcher from './LanguageSwitcher'
 
 const categories = [
   'Electronics', 'Home & Kitchen', 'Sports & Outdoors', 'Fashion', 'Toys & Games',
@@ -9,12 +12,13 @@ const categories = [
 ]
 
 const conditions = [
-  { label: 'Open Box Deals', value: 'open-box' },
-  { label: 'Like New', value: 'like-new' },
-  { label: 'Refurbished', value: 'refurbished' },
+  { labelKey: 'conditions.openBoxDeals', value: 'open-box' },
+  { labelKey: 'conditions.like-new', value: 'like-new' },
+  { labelKey: 'conditions.refurbished', value: 'refurbished' },
 ]
 
 export default function Navbar() {
+  const { t } = useTranslation()
   const { user, logout } = useAuth()
   const { cartCount } = useCart()
   const navigate = useNavigate()
@@ -46,8 +50,8 @@ export default function Navbar() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
             <div className="leading-tight">
-              <div className="text-[11px] text-gray-400">Deliver to</div>
-              <div className="text-sm font-bold">United States</div>
+              <div className="text-[11px] text-gray-400">{t('nav.deliverTo')}</div>
+              <div className="text-sm font-bold">{t('nav.unitedStates')}</div>
             </div>
           </div>
 
@@ -55,10 +59,10 @@ export default function Navbar() {
           <form onSubmit={handleSearch} className="flex-1 flex">
             <input
               type="text"
-              placeholder="Search Good Open Box"
+              placeholder={t('nav.searchPlaceholder')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-4 py-2 text-gray-900 text-sm rounded-l-md focus:outline-none focus:ring-2 focus:ring-amber-400 min-w-0"
+              className="flex-1 px-4 py-2 bg-white text-gray-900 text-sm rounded-l-md focus:outline-none focus:ring-2 focus:ring-amber-400 min-w-0"
             />
             <button
               type="submit"
@@ -70,13 +74,16 @@ export default function Navbar() {
             </button>
           </form>
 
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+
           {/* Account */}
           {user ? (
             <div className="relative group shrink-0">
               <button className="hidden md:flex flex-col items-start hover:ring-1 hover:ring-white rounded px-2 py-1 text-sm leading-tight">
-                <span className="text-[11px] text-gray-300">Hello, {user.name.split(' ')[0]}</span>
+                <span className="text-[11px] text-gray-300">{t('nav.hello', { name: user.name.split(' ')[0] })}</span>
                 <span className="font-bold text-sm flex items-center gap-0.5">
-                  Account
+                  {t('nav.account')}
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -87,37 +94,37 @@ export default function Navbar() {
                   <p className="text-sm font-semibold text-gray-900">{user.name}</p>
                   <p className="text-xs text-gray-500">{user.email}</p>
                 </div>
-                <Link to="/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">My Orders</Link>
+                <Link to="/orders" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">{t('nav.myOrders')}</Link>
                 {user.role === 'vendor' && (
                   <>
-                    <Link to="/vendor/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">Vendor Dashboard</Link>
-                    <Link to="/vendor/products" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">My Products</Link>
+                    <Link to="/vendor/dashboard" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">{t('nav.vendorDashboard')}</Link>
+                    <Link to="/vendor/products" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">{t('nav.myProducts')}</Link>
                   </>
                 )}
                 {user.role === 'admin' && (
-                  <Link to="/admin" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">Admin Dashboard</Link>
+                  <Link to="/admin" className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700">{t('nav.adminDashboard')}</Link>
                 )}
                 <div className="border-t">
                   <button
                     onClick={() => { logout(); navigate('/') }}
                     className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600"
                   >
-                    Sign Out
+                    {t('nav.signOut')}
                   </button>
                 </div>
               </div>
             </div>
           ) : (
             <Link to="/login" className="hidden md:flex flex-col items-start hover:ring-1 hover:ring-white rounded px-2 py-1 shrink-0 text-sm leading-tight">
-              <span className="text-[11px] text-gray-300">Hello, sign in</span>
-              <span className="font-bold">Account</span>
+              <span className="text-[11px] text-gray-300">{t('nav.helloSignIn')}</span>
+              <span className="font-bold">{t('nav.account')}</span>
             </Link>
           )}
 
           {/* Orders */}
           <Link to="/orders" className="hidden md:flex flex-col items-start hover:ring-1 hover:ring-white rounded px-2 py-1 shrink-0 text-sm leading-tight">
-            <span className="text-[11px] text-gray-300">Returns</span>
-            <span className="font-bold">& Orders</span>
+            <span className="text-[11px] text-gray-300">{t('nav.returns')}</span>
+            <span className="font-bold">{t('nav.andOrders')}</span>
           </Link>
 
           {/* Cart */}
@@ -130,7 +137,7 @@ export default function Navbar() {
                 {cartCount}
               </span>
             </div>
-            <span className="font-bold text-sm hidden sm:block">Cart</span>
+            <span className="font-bold text-sm hidden sm:block">{t('nav.cart')}</span>
           </Link>
 
           {/* Mobile menu toggle */}
@@ -146,7 +153,7 @@ export default function Navbar() {
       <div className="bg-gray-800 text-white text-sm hidden md:block">
         <div className="max-w-[1400px] mx-auto px-4 flex items-center gap-1 h-10 overflow-x-auto">
           <Link to="/products" className="px-3 py-1 hover:ring-1 hover:ring-white rounded whitespace-nowrap font-medium">
-            All Products
+            {t('nav.allProducts')}
           </Link>
           <span className="text-gray-600">|</span>
           {conditions.map((c) => (
@@ -155,7 +162,7 @@ export default function Navbar() {
               to={`/products?condition=${c.value}`}
               className="px-3 py-1 hover:ring-1 hover:ring-white rounded whitespace-nowrap"
             >
-              {c.label}
+              {t(c.labelKey)}
             </Link>
           ))}
           <span className="text-gray-600">|</span>
@@ -165,7 +172,7 @@ export default function Navbar() {
               to={`/products?category=${encodeURIComponent(cat)}`}
               className="px-3 py-1 hover:ring-1 hover:ring-white rounded whitespace-nowrap"
             >
-              {cat}
+              {translateCategory(t, cat)}
             </Link>
           ))}
         </div>
@@ -177,35 +184,40 @@ export default function Navbar() {
           <form onSubmit={handleSearch} className="flex p-3">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t('nav.searchMobilePlaceholder')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md text-sm focus:outline-none"
+              autoFocus
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
             />
-            <button type="submit" className="px-3 py-2 bg-amber-400 rounded-r-md text-sm font-medium">Search</button>
+            <button type="submit" className="px-3 py-2 bg-amber-400 rounded-r-md text-sm font-medium">{t('nav.search')}</button>
           </form>
           <div className="pb-3 px-3 space-y-0.5">
-            <Link to="/products" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">All Products</Link>
+            <Link to="/products" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">{t('nav.allProducts')}</Link>
             {conditions.map((c) => (
-              <Link key={c.value} to={`/products?condition=${c.value}`} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">{c.label}</Link>
+              <Link key={c.value} to={`/products?condition=${c.value}`} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">{t(c.labelKey)}</Link>
             ))}
             <div className="border-t my-2" />
-            <Link to="/cart" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">Cart ({cartCount})</Link>
+            <div className="px-3 py-2">
+              <LanguageSwitcher mobile />
+            </div>
+            <div className="border-t my-2" />
+            <Link to="/cart" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">{t('nav.cartCount', { count: cartCount })}</Link>
             {user ? (
               <>
-                <Link to="/orders" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">My Orders</Link>
+                <Link to="/orders" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">{t('nav.myOrders')}</Link>
                 {user.role === 'vendor' && (
-                  <Link to="/vendor/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">Vendor Dashboard</Link>
+                  <Link to="/vendor/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">{t('nav.vendorDashboard')}</Link>
                 )}
                 {user.role === 'admin' && (
-                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">Admin Dashboard</Link>
+                  <Link to="/admin" onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded">{t('nav.adminDashboard')}</Link>
                 )}
-                <button onClick={() => { logout(); navigate('/'); setMobileOpen(false) }} className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 rounded">Sign Out</button>
+                <button onClick={() => { logout(); navigate('/'); setMobileOpen(false) }} className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 rounded">{t('nav.signOut')}</button>
               </>
             ) : (
               <>
-                <Link to="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">Sign In</Link>
-                <Link to="/register" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-amber-600 hover:bg-gray-100 rounded">Create Account</Link>
+                <Link to="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-100 rounded font-medium">{t('nav.signIn')}</Link>
+                <Link to="/register" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-sm font-medium text-amber-600 hover:bg-gray-100 rounded">{t('nav.createAccount')}</Link>
               </>
             )}
           </div>

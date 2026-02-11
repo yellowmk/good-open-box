@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
+  const { t } = useTranslation()
   const { login } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
@@ -23,7 +25,7 @@ export default function Login() {
         navigate('/')
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password')
+      setError(err.response?.data?.message || t('auth.invalidCredentials'))
     } finally {
       setLoading(false)
     }
@@ -37,7 +39,7 @@ export default function Login() {
 
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-md border border-gray-200 p-6">
-          <h1 className="text-2xl font-normal text-gray-900 mb-4">Sign in</h1>
+          <h1 className="text-2xl font-normal text-gray-900 mb-4">{t('auth.signIn')}</h1>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 text-sm">
@@ -47,7 +49,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Email</label>
+              <label className="block text-sm font-bold text-gray-900 mb-1">{t('auth.email')}</label>
               <input
                 type="email"
                 required
@@ -57,7 +59,10 @@ export default function Login() {
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Password</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-bold text-gray-900">{t('auth.password')}</label>
+                <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">{t('auth.forgotPassword')}</Link>
+              </div>
               <input
                 type="password"
                 required
@@ -71,12 +76,12 @@ export default function Login() {
               disabled={loading}
               className="w-full py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition disabled:opacity-50"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? t('auth.signingIn') : t('auth.signIn')}
             </button>
           </form>
 
           <p className="text-xs text-gray-500 mt-4">
-            By continuing, you agree to Good Open Box's Conditions of Use and Privacy Notice.
+            {t('auth.termsSignIn')}
           </p>
         </div>
 
@@ -85,7 +90,7 @@ export default function Login() {
             <div className="w-full border-t border-gray-300" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="px-3 bg-gray-100 text-gray-500">New to Good Open Box?</span>
+            <span className="px-3 bg-gray-100 text-gray-500">{t('auth.newToGOB')}</span>
           </div>
         </div>
 
@@ -93,7 +98,7 @@ export default function Login() {
           to="/register"
           className="block w-full py-2 text-center text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 text-gray-700 font-medium transition"
         >
-          Create your account
+          {t('auth.createYourAccount')}
         </Link>
       </div>
     </div>

@@ -1,0 +1,16 @@
+[Unit]
+Description=Good Open Box Backend API
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=patrick
+WorkingDirectory=/home/patrick/good-open-box/backend
+ExecStart=/home/patrick/.nvm/versions/node/v24.13.0/bin/node server.js
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+Environment=PORT=5002
+
+[Install]
+WantedBy=multi-user.target

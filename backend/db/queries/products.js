@@ -25,8 +25,8 @@ function toProduct(row) {
   };
 }
 
-async function findWithFilters({ category, condition, vendor, brand, minPrice, maxPrice, search, sort, page = 1, limit = 20 }) {
-  const conditions = ['stock > 0'];
+async function findWithFilters({ category, condition, vendor, brand, minPrice, maxPrice, search, sort, page = 1, limit = 20, includeOutOfStock = false }) {
+  const conditions = includeOutOfStock ? [] : ['stock > 0'];
   const params = [];
   let i = 1;
 

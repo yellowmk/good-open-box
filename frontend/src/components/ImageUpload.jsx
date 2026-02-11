@@ -1,7 +1,10 @@
 import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function ImageUpload({ images = [], onChange }) {
+  const { t } = useTranslation()
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState('')
   const [dragOver, setDragOver] = useState(false)
   const fileRef = useRef()
 
@@ -9,7 +12,7 @@ export default function ImageUpload({ images = [], onChange }) {
     const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
     if (!cloudName || !uploadPreset) {
-      alert('Image upload not configured. Contact the site administrator.')
+      alert(t('imageUpload.notConfigured'))
       return null
     }
     const formData = new FormData()
@@ -31,15 +34,17 @@ export default function ImageUpload({ images = [], onChange }) {
     setUploading(true)
     try {
       const urls = []
-      for (const file of valid) {
-        const url = await uploadFile(file)
+      for (let i = 0; i < valid.length; i++) {
+        setUploadProgress(t('imageUpload.uploadingProgress', { current: i + 1, total: valid.length }))
+        const url = await uploadFile(valid[i])
         if (url) urls.push(url)
       }
       onChange([...images, ...urls])
     } catch (err) {
-      alert('Upload failed: ' + err.message)
+      alert(t('imageUpload.uploadFailed', { message: err.message }))
     } finally {
       setUploading(false)
+      setUploadProgress('')
     }
   }
 
@@ -64,7 +69,7 @@ export default function ImageUpload({ images = [], onChange }) {
   return (
     <div>
       <label className="block text-sm font-bold text-gray-900 mb-1">
-        Product Images
+        {t('imageUpload.productImages')}
       </label>
 
       {/* Image Grid */}
@@ -75,7 +80,7 @@ export default function ImageUpload({ images = [], onChange }) {
               <img src={img} alt="" className="w-full h-full object-cover" />
               {i === 0 && (
                 <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-amber-400 text-[10px] font-bold text-gray-900 rounded">
-                  MAIN
+                  {t('imageUpload.main')}
                 </span>
               )}
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-1">
@@ -84,7 +89,7 @@ export default function ImageUpload({ images = [], onChange }) {
                     type="button"
                     onClick={() => moveImage(i, -1)}
                     className="w-7 h-7 bg-white rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-100"
-                    title="Move left"
+                    title={t('imageUpload.moveLeft')}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -95,7 +100,7 @@ export default function ImageUpload({ images = [], onChange }) {
                   type="button"
                   onClick={() => removeImage(i)}
                   className="w-7 h-7 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600"
-                  title="Remove"
+                  title={t('imageUpload.remove')}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -106,7 +111,7 @@ export default function ImageUpload({ images = [], onChange }) {
                     type="button"
                     onClick={() => moveImage(i, 1)}
                     className="w-7 h-7 bg-white rounded-full flex items-center justify-center text-gray-700 hover:bg-gray-100"
-                    title="Move right"
+                    title={t('imageUpload.moveRight')}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -142,7 +147,7 @@ export default function ImageUpload({ images = [], onChange }) {
         {uploading ? (
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-500" />
-            Uploading...
+            {uploadProgress || t('imageUpload.uploading')}
           </div>
         ) : (
           <>
@@ -150,9 +155,9 @@ export default function ImageUpload({ images = [], onChange }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             <p className="text-sm text-gray-500">
-              <span className="text-amber-600 font-medium">Click to upload</span> or drag and drop
+              <span className="text-amber-600 font-medium">{t('imageUpload.clickToSelect')}</span> {t('imageUpload.orDragDrop')}
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">PNG, JPG, WebP up to 10MB</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('imageUpload.fileTypes')}</p>
           </>
         )}
       </div>

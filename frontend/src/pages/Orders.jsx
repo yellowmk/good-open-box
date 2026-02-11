@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
+import { translateStatus } from '../lib/translations'
 
 const statusColors = {
   pending: 'bg-yellow-50 text-yellow-800 border-yellow-200',
@@ -13,6 +15,7 @@ const statusColors = {
 }
 
 export default function Orders() {
+  const { t } = useTranslation()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -27,7 +30,7 @@ export default function Orders() {
     return (
       <div className="bg-gray-100 min-h-screen">
         <div className="max-w-[1400px] mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Your Orders</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('orders.yourOrders')}</h1>
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="bg-white rounded-md border border-gray-200 p-5 animate-pulse">
@@ -45,19 +48,19 @@ export default function Orders() {
     <div className="bg-gray-100 min-h-screen">
       <div className="max-w-[1400px] mx-auto px-4 py-4">
         <nav className="text-sm text-gray-500 mb-3">
-          <Link to="/" className="hover:text-amber-700 hover:underline">Your Account</Link>
+          <Link to="/" className="hover:text-amber-700 hover:underline">{t('orders.yourAccount')}</Link>
           <span className="mx-1.5">/</span>
-          <span className="text-gray-900">Your Orders</span>
+          <span className="text-gray-900">{t('orders.yourOrders')}</span>
         </nav>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Your Orders</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('orders.yourOrders')}</h1>
 
         {orders.length === 0 ? (
           <div className="bg-white rounded-md border border-gray-200 text-center py-16 px-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-            <p className="text-sm text-gray-500 mb-4">Looking for something? Start shopping to place your first order.</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{t('orders.noOrders')}</h3>
+            <p className="text-sm text-gray-500 mb-4">{t('orders.noOrdersHint')}</p>
             <Link to="/products" className="inline-block px-6 py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition">
-              Start Shopping
+              {t('orders.startShopping')}
             </Link>
           </div>
         ) : (
@@ -68,7 +71,7 @@ export default function Orders() {
                 <div className="bg-gray-50 border-b border-gray-200 px-5 py-3 flex flex-wrap items-center justify-between gap-2 text-sm">
                   <div className="flex flex-wrap gap-6">
                     <div>
-                      <span className="text-gray-500 uppercase text-xs">Order placed</span>
+                      <span className="text-gray-500 uppercase text-xs">{t('orders.orderPlaced')}</span>
                       <p className="text-gray-900">
                         {new Date(order.createdAt).toLocaleDateString('en-US', {
                           year: 'numeric', month: 'long', day: 'numeric',
@@ -76,12 +79,12 @@ export default function Orders() {
                       </p>
                     </div>
                     <div>
-                      <span className="text-gray-500 uppercase text-xs">Total</span>
+                      <span className="text-gray-500 uppercase text-xs">{t('orders.total')}</span>
                       <p className="text-gray-900 font-bold">${order.total?.toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-gray-500 uppercase text-xs">Order #</span>
+                    <span className="text-gray-500 uppercase text-xs">{t('orders.orderNumber')}</span>
                     <p className="text-blue-600">{order.id}</p>
                   </div>
                 </div>
@@ -91,14 +94,14 @@ export default function Orders() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded border text-xs font-semibold capitalize ${statusColors[order.status] || 'bg-gray-50 text-gray-800 border-gray-200'}`}>
-                        {order.status}
+                        {translateStatus(t, order.status)}
                       </span>
                     </div>
                     <Link
                       to={`/orders/${order.id}`}
                       className="text-sm text-blue-600 hover:text-amber-700 hover:underline"
                     >
-                      View order details
+                      {t('orders.viewDetails')}
                     </Link>
                   </div>
                   <div className="flex gap-2 overflow-x-auto">

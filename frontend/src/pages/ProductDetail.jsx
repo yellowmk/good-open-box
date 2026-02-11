@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import ConditionBadge from '../components/ConditionBadge'
 import AiRecommendations from '../components/AiRecommendations'
+import { translateCondition } from '../lib/translations'
 
 export default function ProductDetail() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const { addToCart } = useCart()
   const { user } = useAuth()
@@ -68,8 +71,8 @@ export default function ProductDetail() {
     return (
       <div className="bg-gray-100 min-h-screen">
         <div className="max-w-[1400px] mx-auto px-4 py-16 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h2>
-          <Link to="/products" className="text-blue-600 hover:text-amber-700 hover:underline">Browse all products</Link>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('product.productNotFound')}</h2>
+          <Link to="/products" className="text-blue-600 hover:text-amber-700 hover:underline">{t('product.browseAll')}</Link>
         </div>
       </div>
     )
@@ -84,9 +87,9 @@ export default function ProductDetail() {
       <div className="max-w-[1400px] mx-auto px-4 py-4">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-4">
-          <Link to="/" className="hover:text-amber-700 hover:underline">Home</Link>
+          <Link to="/" className="hover:text-amber-700 hover:underline">{t('products.home')}</Link>
           <span className="mx-1.5">/</span>
-          <Link to="/products" className="hover:text-amber-700 hover:underline">Products</Link>
+          <Link to="/products" className="hover:text-amber-700 hover:underline">{t('products.products')}</Link>
           {product.category && (
             <>
               <span className="mx-1.5">/</span>
@@ -137,7 +140,7 @@ export default function ProductDetail() {
             <div>
               <h1 className="text-xl md:text-2xl font-medium text-gray-900 leading-snug">{product.name}</h1>
               {product.brand && (
-                <p className="text-sm text-blue-600 hover:text-amber-700 mt-1">Visit the {product.brand} Store</p>
+                <p className="text-sm text-blue-600 hover:text-amber-700 mt-1">{t('product.visitStore', { brand: product.brand })}</p>
               )}
 
               {product.rating > 0 && (
@@ -150,14 +153,14 @@ export default function ProductDetail() {
                       </svg>
                     ))}
                   </div>
-                  <span className="text-sm text-blue-600">{product.numReviews} ratings</span>
+                  <span className="text-sm text-blue-600">{t('product.ratings', { count: product.numReviews })}</span>
                 </div>
               )}
 
               <div className="mt-3">
                 {discount > 0 && (
                   <span className="inline-block text-sm bg-red-600 text-white px-2 py-0.5 rounded-sm font-medium mb-1">
-                    {discount}% off
+                    {t('product.percentOff', { percent: discount })}
                   </span>
                 )}
                 <div className="flex items-baseline gap-1">
@@ -167,7 +170,7 @@ export default function ProductDetail() {
                 </div>
                 {product.compareAtPrice && (
                   <p className="text-sm text-gray-500 mt-0.5">
-                    List Price: <span className="line-through">${product.compareAtPrice.toFixed(2)}</span>
+                    {t('product.listPrice')} <span className="line-through">${product.compareAtPrice.toFixed(2)}</span>
                   </p>
                 )}
               </div>
@@ -181,16 +184,16 @@ export default function ProductDetail() {
               <div className="mt-4 border-t border-gray-200 pt-4">
                 <div className="flex items-center gap-2 text-sm">
                   {product.stock > 0 ? (
-                    <span className="text-lg font-medium text-green-700">In Stock</span>
+                    <span className="text-lg font-medium text-green-700">{t('product.inStock')}</span>
                   ) : (
-                    <span className="text-lg font-medium text-red-600">Out of Stock</span>
+                    <span className="text-lg font-medium text-red-600">{t('product.outOfStock')}</span>
                   )}
                 </div>
 
                 {product.stock > 0 && (
                   <div className="mt-3 space-y-3">
                     <div className="flex items-center gap-2">
-                      <label className="text-sm text-gray-700">Qty:</label>
+                      <label className="text-sm text-gray-700">{t('product.qty')}</label>
                       <select
                         value={quantity}
                         onChange={(e) => setQuantity(parseInt(e.target.value))}
@@ -209,13 +212,13 @@ export default function ProductDetail() {
                           : 'bg-amber-400 hover:bg-amber-500 text-gray-900'
                       }`}
                     >
-                      {added ? 'Added to Cart!' : 'Add to Cart'}
+                      {added ? t('product.addedToCart') : t('product.addToCart')}
                     </button>
                     <button
                       onClick={() => { addToCart(product, quantity); window.location.href = '/checkout' }}
                       className="w-full py-2.5 rounded-full font-medium text-sm bg-orange-500 hover:bg-orange-600 text-white transition"
                     >
-                      Buy Now
+                      {t('product.buyNow')}
                     </button>
                   </div>
                 )}
@@ -238,18 +241,18 @@ export default function ProductDetail() {
         <section className="mt-6">
           <div className="bg-white rounded-md border border-gray-200 p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4">
-              Customer Reviews ({product.reviews?.length || 0})
+              {t('product.customerReviews', { count: product.reviews?.length || 0 })}
             </h2>
 
             {user && (
               <div className="border border-gray-200 rounded-md p-4 mb-6">
-                <h3 className="font-semibold text-sm text-gray-900 mb-3">Write a customer review</h3>
+                <h3 className="font-semibold text-sm text-gray-900 mb-3">{t('product.writeReview')}</h3>
                 {reviewError && (
                   <p className="text-red-600 text-sm mb-3">{reviewError}</p>
                 )}
                 <form onSubmit={handleReview} className="space-y-3">
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Overall rating</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('product.overallRating')}</label>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((n) => (
                         <button
@@ -266,18 +269,18 @@ export default function ProductDetail() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-700 mb-1">Your review</label>
+                    <label className="block text-sm text-gray-700 mb-1">{t('product.yourReview')}</label>
                     <textarea
                       value={reviewForm.comment}
                       onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
                       rows={3}
                       required
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-amber-500"
-                      placeholder="What did you like or dislike?"
+                      placeholder={t('product.reviewPlaceholder')}
                     />
                   </div>
                   <button type="submit" className="px-6 py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 text-sm font-medium rounded-md transition">
-                    Submit Review
+                    {t('product.submitReview')}
                   </button>
                 </form>
               </div>
@@ -303,7 +306,7 @@ export default function ProductDetail() {
                       </div>
                       {review.createdAt && (
                         <span className="text-xs text-gray-400">
-                          Reviewed on {new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                          {t('product.reviewedOn', { date: new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) })}
                         </span>
                       )}
                     </div>
@@ -311,7 +314,7 @@ export default function ProductDetail() {
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500 text-sm text-center py-6">No reviews yet. Be the first to review this product!</p>
+                <p className="text-gray-500 text-sm text-center py-6">{t('product.noReviews')}</p>
               )}
             </div>
           </div>
@@ -320,6 +323,26 @@ export default function ProductDetail() {
         {/* AI Recommendations */}
         <AiRecommendations productId={id} />
       </div>
+
+      {/* Mobile Sticky Add to Cart */}
+      {product.stock > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3 flex items-center gap-3 md:hidden z-40 shadow-[0_-2px_10px_rgba(0,0,0,0.1)]">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-gray-500 truncate">{product.name}</p>
+            <p className="text-lg font-bold text-gray-900">${product.price.toFixed(2)}</p>
+          </div>
+          <button
+            onClick={handleAddToCart}
+            className={`px-6 py-2.5 rounded-full font-medium text-sm transition whitespace-nowrap ${
+              added
+                ? 'bg-green-600 text-white'
+                : 'bg-amber-400 hover:bg-amber-500 text-gray-900'
+            }`}
+          >
+            {added ? t('product.added') : t('product.addToCart')}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

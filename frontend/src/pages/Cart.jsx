@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
+import { translateCondition } from '../lib/translations'
 
 export default function Cart() {
+  const { t } = useTranslation()
   const { items, updateQuantity, removeFromCart, subtotal } = useCart()
 
   const tax = subtotal * 0.08
@@ -16,10 +19,10 @@ export default function Cart() {
             <svg className="w-20 h-20 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
             </svg>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Your Good Open Box Cart is empty</h2>
-            <p className="text-sm text-gray-500 mb-6">Check out today's deals or start shopping.</p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">{t('cart.emptyTitle')}</h2>
+            <p className="text-sm text-gray-500 mb-6">{t('cart.emptySubtitle')}</p>
             <Link to="/products" className="inline-block px-6 py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition">
-              Shop today's deals
+              {t('cart.shopDeals')}
             </Link>
           </div>
         </div>
@@ -34,8 +37,8 @@ export default function Cart() {
           {/* Cart items */}
           <div className="flex-1">
             <div className="bg-white rounded-md border border-gray-200 p-6">
-              <h1 className="text-2xl font-bold text-gray-900 pb-4 border-b border-gray-200">Shopping Cart</h1>
-              <p className="text-sm text-gray-500 text-right pb-2 pt-2">Price</p>
+              <h1 className="text-2xl font-bold text-gray-900 pb-4 border-b border-gray-200">{t('cart.shoppingCart')}</h1>
+              <p className="text-sm text-gray-500 text-right pb-2 pt-2">{t('cart.price')}</p>
 
               <div className="divide-y divide-gray-200">
                 {items.map((item) => (
@@ -57,8 +60,8 @@ export default function Cart() {
                           <Link to={`/products/${item.product.id}`} className="text-sm font-medium text-gray-900 hover:text-amber-700 line-clamp-2">
                             {item.product.name}
                           </Link>
-                          <p className="text-xs text-green-700 mt-1">In Stock</p>
-                          <p className="text-xs text-gray-500 capitalize mt-0.5">Condition: {item.product.condition}</p>
+                          <p className="text-xs text-green-700 mt-1">{t('cart.inStock')}</p>
+                          <p className="text-xs text-gray-500 capitalize mt-0.5">{t('cart.conditionLabel', { condition: translateCondition(t, item.product.condition) })}</p>
                         </div>
                         <div className="text-right shrink-0">
                           <span className="text-lg font-bold text-gray-900">${(item.product.price * item.quantity).toFixed(2)}</span>
@@ -85,7 +88,7 @@ export default function Cart() {
                           onClick={() => removeFromCart(item.product.id)}
                           className="text-blue-600 hover:text-amber-700 text-sm hover:underline"
                         >
-                          Delete
+                          {t('cart.delete')}
                         </button>
                       </div>
                     </div>
@@ -95,7 +98,7 @@ export default function Cart() {
 
               <div className="text-right pt-4 border-t border-gray-200">
                 <span className="text-lg">
-                  Subtotal ({items.reduce((s, i) => s + i.quantity, 0)} items): <span className="font-bold">${subtotal.toFixed(2)}</span>
+                  {t('cart.subtotalItems', { count: items.reduce((s, i) => s + i.quantity, 0) })} <span className="font-bold">${subtotal.toFixed(2)}</span>
                 </span>
               </div>
             </div>
@@ -106,29 +109,29 @@ export default function Cart() {
             <div className="bg-white rounded-md border border-gray-200 p-5">
               {subtotal > 0 && subtotal < 50 && (
                 <p className="text-xs text-green-700 mb-3">
-                  Add ${(50 - subtotal).toFixed(2)} more for <b>FREE Shipping</b>
+                  {t('cart.addMore', { amount: (50 - subtotal).toFixed(2) })}
                 </p>
               )}
               {subtotal >= 50 && (
                 <p className="text-xs text-green-700 mb-3">
-                  Your order qualifies for <b>FREE Shipping</b>
+                  {t('cart.qualifiesFreeShipping')}
                 </p>
               )}
               <div className="space-y-2 text-sm mb-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
+                  <span className="text-gray-600">{t('cart.subtotal')}</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (est.)</span>
+                  <span className="text-gray-600">{t('cart.taxEst')}</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Shipping</span>
-                  <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+                  <span className="text-gray-600">{t('cart.shipping')}</span>
+                  <span>{shipping === 0 ? t('cart.free') : `$${shipping.toFixed(2)}`}</span>
                 </div>
                 <div className="border-t border-gray-200 pt-2 flex justify-between text-base font-bold">
-                  <span>Total</span>
+                  <span>{t('cart.total')}</span>
                   <span>${total.toFixed(2)}</span>
                 </div>
               </div>
@@ -136,7 +139,7 @@ export default function Cart() {
                 to="/checkout"
                 className="block w-full py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 text-center rounded-full text-sm font-medium transition"
               >
-                Proceed to checkout
+                {t('cart.proceedToCheckout')}
               </Link>
             </div>
           </div>

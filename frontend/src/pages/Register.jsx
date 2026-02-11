@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../context/AuthContext'
 
 export default function Register() {
+  const { t } = useTranslation()
   const { register } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' })
@@ -13,11 +15,11 @@ export default function Register() {
     e.preventDefault()
     setError('')
     if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match')
+      setError(t('auth.passwordsNoMatch'))
       return
     }
     if (form.password.length < 6) {
-      setError('Password must be at least 6 characters')
+      setError(t('auth.passwordMinLength'))
       return
     }
     setLoading(true)
@@ -25,7 +27,7 @@ export default function Register() {
       await register(form.name, form.email, form.password)
       navigate('/')
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed')
+      setError(err.response?.data?.message || t('auth.registrationFailed'))
     } finally {
       setLoading(false)
     }
@@ -39,7 +41,7 @@ export default function Register() {
 
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-md border border-gray-200 p-6">
-          <h1 className="text-2xl font-normal text-gray-900 mb-4">Create account</h1>
+          <h1 className="text-2xl font-normal text-gray-900 mb-4">{t('auth.createAccount')}</h1>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 text-sm">
@@ -49,18 +51,18 @@ export default function Register() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Your name</label>
+              <label className="block text-sm font-bold text-gray-900 mb-1">{t('auth.yourName')}</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-                placeholder="First and last name"
+                placeholder={t('auth.namePlaceholder')}
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Email</label>
+              <label className="block text-sm font-bold text-gray-900 mb-1">{t('auth.email')}</label>
               <input
                 type="email"
                 required
@@ -70,18 +72,18 @@ export default function Register() {
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Password</label>
+              <label className="block text-sm font-bold text-gray-900 mb-1">{t('auth.password')}</label>
               <input
                 type="password"
                 required
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-                placeholder="At least 6 characters"
+                placeholder={t('auth.passwordPlaceholder')}
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">Re-enter password</label>
+              <label className="block text-sm font-bold text-gray-900 mb-1">{t('auth.reEnterPassword')}</label>
               <input
                 type="password"
                 required
@@ -95,18 +97,18 @@ export default function Register() {
               disabled={loading}
               className="w-full py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition disabled:opacity-50"
             >
-              {loading ? 'Creating account...' : 'Create your account'}
+              {loading ? t('auth.creatingAccount') : t('auth.createYourAccount')}
             </button>
           </form>
 
           <p className="text-xs text-gray-500 mt-4">
-            By creating an account, you agree to Good Open Box's Conditions of Use and Privacy Notice.
+            {t('auth.termsCreate')}
           </p>
 
           <div className="border-t border-gray-200 mt-4 pt-4">
             <p className="text-sm text-gray-700">
-              Already have an account?{' '}
-              <Link to="/login" className="text-blue-600 hover:text-amber-700 hover:underline">Sign in</Link>
+              {t('auth.alreadyHaveAccount')}{' '}
+              <Link to="/login" className="text-blue-600 hover:text-amber-700 hover:underline">{t('auth.signIn')}</Link>
             </p>
           </div>
         </div>

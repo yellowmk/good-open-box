@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import ConditionBadge from './ConditionBadge'
 
 export default function ProductCard({ product }) {
+  const { t } = useTranslation()
   const discount = product.compareAtPrice
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
     : 0
@@ -27,7 +29,7 @@ export default function ProductCard({ product }) {
         )}
         {discount > 0 && (
           <span className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-sm">
-            {discount}% off
+            {t('product.percentOff', { percent: discount })}
           </span>
         )}
       </div>
@@ -57,7 +59,7 @@ export default function ProductCard({ product }) {
           </div>
           {product.compareAtPrice && (
             <div className="text-xs text-gray-500">
-              List: <span className="line-through">${product.compareAtPrice.toFixed(2)}</span>
+              {t('product.list')} <span className="line-through">${product.compareAtPrice.toFixed(2)}</span>
             </div>
           )}
         </div>

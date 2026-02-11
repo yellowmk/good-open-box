@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
 
 export default function ChatWidget() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -36,10 +38,10 @@ export default function ChatWidget() {
       if (foundProducts?.length > 0) setProducts(foundProducts)
     } catch (err) {
       const errorMsg = err.response?.status === 429
-        ? 'Too many messages. Please wait a moment and try again.'
+        ? t('chat.tooManyMessages')
         : err.response?.status === 503
-        ? 'AI assistant is not available right now.'
-        : 'Something went wrong. Please try again.'
+        ? t('chat.aiUnavailable')
+        : t('chat.somethingWentWrong')
       setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }])
     } finally {
       setLoading(false)
@@ -57,7 +59,7 @@ export default function ChatWidget() {
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-5 right-5 w-14 h-14 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg flex items-center justify-center transition z-50"
-        aria-label={open ? 'Close chat' : 'Open chat assistant'}
+        aria-label={open ? t('nav.closeChat') : t('nav.openChat')}
       >
         {open ? (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,16 +84,16 @@ export default function ChatWidget() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-gray-900">Shopping Assistant</h3>
-                <p className="text-xs text-gray-500">Ask me about products</p>
+                <h3 className="text-sm font-bold text-gray-900">{t('chat.shoppingAssistant')}</h3>
+                <p className="text-xs text-gray-500">{t('chat.askAboutProducts')}</p>
               </div>
             </div>
             <button
               onClick={clearChat}
               className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 hover:bg-gray-100 rounded"
-              title="Clear chat"
+              title={t('chat.clearChat')}
             >
-              Clear
+              {t('chat.clear')}
             </button>
           </div>
 
@@ -99,9 +101,9 @@ export default function ChatWidget() {
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {messages.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-sm text-gray-500 mb-3">Hi! I can help you find products, compare items, and get recommendations.</p>
+                <p className="text-sm text-gray-500 mb-3">{t('chat.welcome')}</p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {['Show me headphones', 'Laptops under $500', 'What categories do you have?'].map(q => (
+                  {[t('chat.suggestHeadphones'), t('chat.suggestLaptops'), t('chat.suggestCategories')].map(q => (
                     <button
                       key={q}
                       onClick={() => { setInput(q); }}
@@ -143,7 +145,7 @@ export default function ChatWidget() {
             {/* Product Cards */}
             {products.length > 0 && messages.length > 0 && (
               <div className="space-y-2 pt-1">
-                <p className="text-xs text-gray-500 font-medium">Products found:</p>
+                <p className="text-xs text-gray-500 font-medium">{t('chat.productsFound')}</p>
                 {products.slice(0, 4).map(p => (
                   <Link
                     key={p.id}
@@ -182,7 +184,7 @@ export default function ChatWidget() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about products..."
+                placeholder={t('chat.inputPlaceholder')}
                 disabled={loading}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 disabled:opacity-50"
               />

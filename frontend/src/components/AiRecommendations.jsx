@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
+import { translateCondition } from '../lib/translations'
 
 export default function AiRecommendations({ productId }) {
+  const { t } = useTranslation()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -28,7 +31,7 @@ export default function AiRecommendations({ productId }) {
     <section className="mt-6">
       <div className="bg-white rounded-md border border-gray-200 p-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">
-          Customers who viewed this also liked
+          {t('ai.alsoLiked')}
         </h2>
 
         {loading ? (
@@ -74,12 +77,12 @@ export default function AiRecommendations({ productId }) {
                   <p className="text-xs text-gray-500">
                     <span className="line-through">${product.compareAtPrice.toFixed(2)}</span>
                     <span className="text-red-600 ml-1">
-                      {Math.round((1 - product.price / product.compareAtPrice) * 100)}% off
+                      {t('product.percentOff', { percent: Math.round((1 - product.price / product.compareAtPrice) * 100) })}
                     </span>
                   </p>
                 )}
                 {product.condition && (
-                  <p className="text-xs text-gray-500 capitalize mt-0.5">{product.condition}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{translateCondition(t, product.condition)}</p>
                 )}
               </Link>
             ))}

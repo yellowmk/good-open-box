@@ -18,7 +18,9 @@ CREATE TABLE users (
   role      VARCHAR(20)  NOT NULL DEFAULT 'customer',
   vendor_id VARCHAR(50),
   is_approved BOOLEAN DEFAULT TRUE,
-  joined_at TIMESTAMPTZ DEFAULT NOW()
+  joined_at TIMESTAMPTZ DEFAULT NOW(),
+  reset_token VARCHAR(255),
+  reset_token_expires TIMESTAMPTZ
 );
 
 CREATE INDEX idx_users_email     ON users (email);

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import API from '../api/axios'
 import ConditionBadge from '../components/ConditionBadge'
 import ImageUpload from '../components/ImageUpload'
 import AiDescriptionGenerator from '../components/AiDescriptionGenerator'
+import { translateCategory, translateCondition } from '../lib/translations'
 
 const emptyProduct = {
   name: '',
@@ -18,6 +20,7 @@ const emptyProduct = {
 }
 
 export default function VendorProducts() {
+  const { t } = useTranslation()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -28,13 +31,9 @@ export default function VendorProducts() {
 
   const fetchProducts = () => {
     setLoading(true)
-    API.get('/products?vendor=me&limit=100')
+    API.get('/vendor/products')
       .then((res) => setProducts(res.data.products || []))
-      .catch(() => {
-        API.get('/products?limit=100')
-          .then((res) => setProducts(res.data.products || []))
-          .catch(() => setProducts([]))
-      })
+      .catch(() => setProducts([]))
       .finally(() => setLoading(false))
   }
 
@@ -86,19 +85,19 @@ export default function VendorProducts() {
       setShowForm(false)
       fetchProducts()
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save product')
+      setError(err.response?.data?.message || t('vendor.failedToSave'))
     } finally {
       setSaving(false)
     }
   }
 
   const handleDelete = async (id) => {
-    if (!confirm('Are you sure you want to delete this product?')) return
+    if (!confirm(t('vendor.confirmDelete'))) return
     try {
       await API.delete(`/products/${id}`)
       fetchProducts()
     } catch {
-      alert('Failed to delete product')
+      alert(t('vendor.failedToDelete'))
     }
   }
 
@@ -106,12 +105,12 @@ export default function VendorProducts() {
     <div className="bg-gray-100 min-h-screen">
       <div className="max-w-[1400px] mx-auto px-4 py-4">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">My Products</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('vendor.myProducts')}</h1>
           <button
             onClick={openCreate}
             className="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition"
           >
-            + Add Product
+            {t('vendor.addProduct')}
           </button>
         </div>
 
@@ -121,7 +120,7 @@ export default function VendorProducts() {
             <div className="bg-white rounded-md border border-gray-200 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
                 <h2 className="text-lg font-bold text-gray-900">
-                  {editId ? 'Edit Product' : 'New Product'}
+                  {editId ? t('vendor.editProduct') : t('vendor.newProduct')}
                 </h2>
                 <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +135,7 @@ export default function VendorProducts() {
 
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-1">Product Name</label>
+                  <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.productName')}</label>
                   <input
                     type="text"
                     required
@@ -147,7 +146,7 @@ export default function VendorProducts() {
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-sm font-bold text-gray-900">Description</label>
+                    <label className="block text-sm font-bold text-gray-900">{t('vendor.description')}</label>
                     <AiDescriptionGenerator
                       form={form}
                       onGenerated={(desc) => setForm({ ...form, description: desc })}
@@ -163,7 +162,7 @@ export default function VendorProducts() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Price ($)</label>
+                    <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.priceDollar')}</label>
                     <input
                       type="number"
                       step="0.01"
@@ -174,7 +173,7 @@ export default function VendorProducts() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Compare at Price ($)</label>
+                    <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.compareAtPrice')}</label>
                     <input
                       type="number"
                       step="0.01"
@@ -186,40 +185,31 @@ export default function VendorProducts() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Category</label>
+                    <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.category')}</label>
                     <select
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm"
                     >
-                      <option>Electronics</option>
-                      <option>Home & Kitchen</option>
-                      <option>Sports & Outdoors</option>
-                      <option>Fashion</option>
-                      <option>Toys & Games</option>
-                      <option>Beauty & Personal Care</option>
-                      <option>Automotive</option>
-                      <option>Office & School</option>
-                      <option>Baby & Kids</option>
-                      <option>Patio & Garden</option>
+                      {['Electronics', 'Home & Kitchen', 'Sports & Outdoors', 'Fashion', 'Toys & Games', 'Beauty & Personal Care', 'Automotive', 'Office & School', 'Baby & Kids', 'Patio & Garden'].map(cat => (
+                        <option key={cat} value={cat}>{translateCategory(t, cat)}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Condition</label>
+                    <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.condition')}</label>
                     <select
                       value={form.condition}
                       onChange={(e) => setForm({ ...form, condition: e.target.value })}
                       className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm"
                     >
-                      <option value="new">New</option>
-                      <option value="like-new">Like New</option>
-                      <option value="open-box">Open Box</option>
-                      <option value="refurbished">Refurbished</option>
-                      <option value="used">Used</option>
+                      {[{v:'new'}, {v:'like-new'}, {v:'open-box'}, {v:'refurbished'}, {v:'used'}].map(c => (
+                        <option key={c.v} value={c.v}>{translateCondition(t, c.v)}</option>
+                      ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-900 mb-1">Stock</label>
+                    <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.stock')}</label>
                     <input
                       type="number"
                       required
@@ -230,7 +220,7 @@ export default function VendorProducts() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-1">Brand</label>
+                  <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.brand')}</label>
                   <input
                     type="text"
                     value={form.brand}
@@ -243,13 +233,13 @@ export default function VendorProducts() {
                   onChange={(imgs) => setForm({ ...form, images: imgs })}
                 />
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-1">Tags (comma-separated)</label>
+                  <label className="block text-sm font-bold text-gray-900 mb-1">{t('vendor.tags')}</label>
                   <input
                     type="text"
                     value={form.tags}
                     onChange={(e) => setForm({ ...form, tags: e.target.value })}
                     className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-                    placeholder="e.g. electronics, sale, featured"
+                    placeholder={t('vendor.tagsPlaceholder')}
                   />
                 </div>
                 <div className="flex gap-3 pt-3 border-t border-gray-200">
@@ -258,14 +248,14 @@ export default function VendorProducts() {
                     disabled={saving}
                     className="px-5 py-2 bg-amber-400 hover:bg-amber-500 text-gray-900 rounded-md text-sm font-medium transition disabled:opacity-50"
                   >
-                    {saving ? 'Saving...' : editId ? 'Update Product' : 'Create Product'}
+                    {saving ? t('vendor.saving') : editId ? t('vendor.updateProduct') : t('vendor.createProduct')}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
                     className="px-5 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50 transition"
                   >
-                    Cancel
+                    {t('vendor.cancel')}
                   </button>
                 </div>
               </form>
@@ -280,19 +270,19 @@ export default function VendorProducts() {
           </div>
         ) : products.length === 0 ? (
           <div className="bg-white rounded-md border border-gray-200 p-10 text-center">
-            <p className="text-gray-500 mb-1">No products yet</p>
-            <p className="text-sm text-gray-400">Click "Add Product" to create your first listing.</p>
+            <p className="text-gray-500 mb-1">{t('vendor.noProducts')}</p>
+            <p className="text-sm text-gray-400">{t('vendor.noProductsHint')}</p>
           </div>
         ) : (
           <div className="bg-white rounded-md border border-gray-200 overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
-                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
-                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">{t('vendor.product')}</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">{t('vendor.price')}</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">{t('vendor.condition')}</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">{t('vendor.stock')}</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">{t('vendor.actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -323,13 +313,13 @@ export default function VendorProducts() {
                           onClick={() => openEdit(product)}
                           className="text-blue-600 hover:text-amber-700 text-sm hover:underline"
                         >
-                          Edit
+                          {t('vendor.edit')}
                         </button>
                         <button
                           onClick={() => handleDelete(product.id)}
                           className="text-red-600 hover:text-red-800 text-sm hover:underline"
                         >
-                          Delete
+                          {t('vendor.deleteBtn')}
                         </button>
                       </div>
                     </td>

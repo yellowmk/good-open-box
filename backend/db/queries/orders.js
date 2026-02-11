@@ -15,6 +15,10 @@ function toOrder(row, items) {
     status: row.status,
     isPaid: row.is_paid,
     isDelivered: row.is_delivered,
+    paidAt: row.paid_at || null,
+    stripePaymentIntentId: row.stripe_payment_intent_id || null,
+    refundStatus: row.refund_status || null,
+    refundedAmount: row.refunded_amount ? Number(row.refunded_amount) : 0,
     createdAt: row.created_at,
   };
 }
@@ -34,7 +38,7 @@ async function getItemsForOrder(orderId) {
   return rows.map(toItem);
 }
 
-async function create({ userId, items, shippingAddress, paymentMethod, subtotal, tax, shippingCost, total }) {
+async function create({ userId, items, shippingAddress, paymentMethod, subtotal, tax, shippingCost, total, status: initialStatus }) {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -55,10 +59,11 @@ async function create({ userId, items, shippingAddress, paymentMethod, subtotal,
     const orderId = 'GOB-' + seqRes.rows[0].nextval;
 
     // Insert order
+    const orderStatus = initialStatus || 'pending';
     const { rows: orderRows } = await client.query(
       `INSERT INTO orders (id, user_id, shipping_address, payment_method, subtotal, tax, shipping_cost, total, status, is_paid, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pending',FALSE,NOW()) RETURNING *`,
-      [orderId, userId, JSON.stringify(shippingAddress || {}), paymentMethod || 'stripe', subtotal, tax, shippingCost, total]
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,FALSE,NOW()) RETURNING *`,
+      [orderId, userId, JSON.stringify(shippingAddress || {}), paymentMethod || 'stripe', subtotal, tax, shippingCost, total, orderStatus]
     );
 
     // Insert order items

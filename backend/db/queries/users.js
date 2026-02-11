@@ -11,6 +11,8 @@ function toUser(row) {
     vendorId: row.vendor_id || undefined,
     isApproved: row.is_approved,
     joinedAt: row.joined_at,
+    stripe_account_id: row.stripe_account_id || null,
+    stripe_onboarding_complete: row.stripe_onboarding_complete || false,
   };
 }
 
@@ -62,6 +64,8 @@ async function findVendors() {
     isApproved: r.is_approved !== false,
     productCount: Number(r.product_count),
     joinedAt: r.joined_at || new Date().toISOString(),
+    stripeAccountId: r.stripe_account_id || null,
+    stripeOnboardingComplete: r.stripe_onboarding_complete || false,
   }));
 }
 
