@@ -6,7 +6,7 @@ struct ProductListView: View {
     var initialSort: String? = nil
 
     @State private var products: [Product] = []
-    @State private var categories: [Category] = []
+    @State private var categories: [ProductCategory] = []
     @State private var searchText = ""
     @State private var selectedCategory: String? = nil
     @State private var selectedCondition: String? = nil
@@ -181,7 +181,7 @@ struct FilterChip: View {
 }
 
 struct FilterSheet: View {
-    let categories: [Category]
+    let categories: [ProductCategory]
     @Binding var selectedCategory: String?
     @Binding var selectedCondition: String?
     @Binding var selectedSort: String

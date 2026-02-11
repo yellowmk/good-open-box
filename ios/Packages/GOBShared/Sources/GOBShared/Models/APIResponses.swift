@@ -40,7 +40,7 @@ public struct ProductDetailResponse: Codable, Sendable {
 // MARK: - Categories
 public struct CategoryListResponse: Codable, Sendable {
     public let success: Bool
-    public let categories: [Category]
+    public let categories: [ProductCategory]
 }
 
 // MARK: - Orders

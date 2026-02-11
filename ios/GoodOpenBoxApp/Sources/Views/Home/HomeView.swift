@@ -4,7 +4,7 @@ import GOBShared
 struct HomeView: View {
     @State private var featured: [Product] = []
     @State private var deals: [Product] = []
-    @State private var categories: [Category] = []
+    @State private var categories: [ProductCategory] = []
     @State private var isLoading = true
     @State private var showChat = false
 
